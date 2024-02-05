@@ -13,6 +13,7 @@ datasource db {
 model admin {
   id        Int @id @default(autoincrement())
   name      String
+  lastname  String
   email     String @unique
   password  String
 
@@ -26,8 +27,9 @@ model seller{
   phoneNumber String
 
     Clients client[]
-
+Contract contract[]
 }
+
 
 model client{
   id          Int    @id @default(autoincrement())
@@ -36,7 +38,10 @@ model client{
   phone     String?   @unique
   email       String   @unique
   Seller seller  @relation(fields: [id], references: [id])
+  Contract contract[]
 }
+
+
 
 model house {
   id            Int       @id @default(autoincrement())
@@ -46,15 +51,15 @@ model house {
   bedrooms   Int
   totalarea     Float
   description    String?
-  picturs       Json?
-  owner    String
 }
 model contract {
   id              Int         @id @default(autoincrement())
-  startdate     DateTime    @default(now())
-  enddate DateTime?  @default(now())
+  startdate       DateTime    @default(now())
+  enddate         DateTime?  @default(now())
   price           Float
-  paid           Float?
-  
+  sellerId        Int
+  clientId        Int
+  client          client      @relation(fields: [clientId], references: [id])
+  seller          seller      @relation(fields: [sellerId], references: [id])
 }
 
